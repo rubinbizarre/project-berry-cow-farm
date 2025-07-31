@@ -35,6 +35,7 @@
   },
   "name":"berry cow farm",
   "resources":[
+    {"id":{"name":"obj_master","path":"objects/obj_master/obj_master.yy",},},
     {"id":{"name":"rm_main","path":"rooms/rm_main/rm_main.yy",},},
   ],
   "resourceType":"GMProject",
