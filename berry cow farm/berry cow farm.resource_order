@@ -16,5 +16,11 @@
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
-  "ResourceOrderSettings":[],
+  "ResourceOrderSettings":[
+    {"name":"obj_camera_controller","order":3,"path":"objects/obj_camera_controller/obj_camera_controller.yy",},
+    {"name":"obj_cow_bb","order":1,"path":"objects/obj_cow_bb/obj_cow_bb.yy",},
+    {"name":"obj_cow_shadow","order":2,"path":"objects/obj_cow_shadow/obj_cow_shadow.yy",},
+    {"name":"spr_cow_bb_idle","order":1,"path":"sprites/spr_cow_bb_idle/spr_cow_bb_idle.yy",},
+    {"name":"spr_cow_bb_walk","order":2,"path":"sprites/spr_cow_bb_walk/spr_cow_bb_walk.yy",},
+  ],
 }
