@@ -14,3 +14,9 @@ x_range_min = 20;
 x_range_max = 40;
 y_range_min = 20;
 y_range_max = 40;
+
+// save data:
+cow_type = "Banana";
+// should be overwritten by stored data:
+cow_name = "Nana";
+cow_mood = 0.8;

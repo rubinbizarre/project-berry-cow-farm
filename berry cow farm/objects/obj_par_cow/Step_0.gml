@@ -31,19 +31,6 @@ need to switch between them at random intervals
 // depth sorting based on room y position
 if (depth != -y) { depth = -y; }
 
-#region for each cow instance, make their obj_cow_shadow follow their position
-for (var i = 0; i < array_length(global.cows); i++) {
-    var obj = global.cows[i];
-    // make shadow follow each cow
-    with (obj) {
-        if (instance_exists(cow_shadow_inst)) {
-			cow_shadow_inst.x = x;
-			cow_shadow_inst.y = y - 2;
-		}
-    }
-}
-#endregion
-
 #region handle sprites, movement calculations and delays for state changes
 switch (cow_state) {
     case COW_STATE.IDLE: {
@@ -93,7 +80,7 @@ switch (cow_state) {
 		dist = point_distance(x, y, x_end, y_end);
 		//show_debug_message("obj_par_cow STEP: dist = "+string(dist));
 		
-		#region apply movement. when close enough to endpoint, snap to it and change state to IDLE with alarm
+		#region apply movement. when close enough to endpoint, snap to it and change state to IDLE with alarm. otherwise check for collision and reset if collided
 		if (dist <= 0.5) and (x != x_end) and (y != y_end) {
 		    x = x_end;
 		    y = y_end;
@@ -104,6 +91,11 @@ switch (cow_state) {
 			var _dx = lengthdir_x(walk_speed, dir);
 			var _dy = lengthdir_y(walk_speed, dir);
 			// apply movement delta and detect collision
+			/*	
+				obj colliding with should be something like self.patch.collision_upper
+				so that the cows only collide with collision objects in their patch??
+				but that doesn't include any environment objects like haybales, trees..
+			*/
 			if (!place_meeting(x + _dx, y, obj_par_collision)) or (!place_meeting(x, y + _dy, obj_par_collision)) {
 				x += _dx;
 				y += _dy;
@@ -149,53 +141,29 @@ switch (cow_state) {
 }
 #endregion
 
-#region handle dragging cows around (wip)
-//// Check if left mouse is pressed while tracked_cow is not active
-//if (mouse_check_button_pressed(mb_left)) and (global.tracked_cow == noone) {
-//	// Loop through cow instances
-//	for (var i = 0; i < array_length(global.cows); i++) {
-//		selected_cow = global.cows[i];
-//		// If user clicked on a cow, store their current xpos and ypos
-//		// and make mouse_dragging true to start cow dragging process
-//		if (place_meeting(mouse_x, mouse_y, selected_cow)) {
-//			cow_prev_x = selected_cow.x;
-//			cow_prev_x = selected_cow.y;
-//			mouse_dragging = true;
-//		}
-//	}
-//}
-
-//// stop dragging when released if was dragging
-//if (mouse_check_button_released(mb_left)) and (mouse_dragging) {
-//	mouse_dragging = false;
-//}
-
-//// while dragging, update cow position
-//if (mouse_dragging) {
-//	selected_cow.x = mouse_x;
-//	selected_cow.y = mouse_y;
-//}
-
-//// if released on cow while dragging then make that tracked cow
-//if (mouse_check_button_released(mb_left)) {
-//	if (global.tracked_cow != id) {
-//		global.tracked_cow = id;
-//		show_debug_message("obj_par_cow LEFT_PRESS: tracked_cow set to "+string(id));
-//	}
-//}
-#endregion
-
 // if released anywhere and was cow_dragging, make cow_dragging false
 if (mouse_check_button_released(mb_left)) and (cow_dragging) {
 	cow_dragging = false;
 	mouse_prev_x = 0;
 	mouse_prev_y = 0;
+	// reset cow behaviour
+	cow_state = COW_STATE.IDLE;
+	alarm[0] = game_get_speed(gamespeed_fps) * delay_idle;
+	show_debug_message("obj_par_cow STEP: cow behaviour reset");
 }
 
+// if mouse moves from initial pos while dragging, then move cow pos
 if (cow_dragging) {
-	// if mouse moves from initial pos while dragging, then move cow pos
 	if (mouse_x != mouse_prev_x) or (mouse_y != mouse_prev_y) {
 		self.x = mouse_x;
 		self.y = mouse_y;
 	}
+}
+
+// if mouse moves at all whilst clicked on the cow, swap from pressed to dragging
+if (cow_pressed) and ((mouse_x != mouse_prev_x) or (mouse_y != mouse_prev_y)) {
+	cow_dragging = true;
+	cow_pressed = false;
+	mouse_prev_x = 0;
+	mouse_prev_y = 0;
 }

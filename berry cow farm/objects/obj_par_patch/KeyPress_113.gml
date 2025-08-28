@@ -1,0 +1,1 @@
+show_debug_message("current cows in patch "+string(id)+": "+string(count_cows_in_patch()));

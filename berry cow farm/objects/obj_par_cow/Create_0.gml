@@ -17,15 +17,15 @@ delay_random = 0;
 
 walk_speed = 0.25;
 
-// store mouse position for click+dragging function
+// store mouse position, etc for click+dragging function
 mouse_prev_x = 0;
 mouse_prev_y = 0;
 cow_prev_x = 0;
 cow_prev_y = 0;
 cow_dragging = false;
-selected_cow = noone;
+cow_pressed = false;
 
-// parameters used in movement
+// parameters used in movement calculation
 x_end = 0;
 y_end = 0;
 dir = 0;
@@ -37,8 +37,15 @@ x_range_max = 50;
 y_range_min = 20;
 y_range_max = 50;
 
-// create instance of obj_cow_shadow at each cow
-cow_shadow_inst = instance_create_depth(x, y - 2, depth + 10, obj_cow_shadow);
+shadow_width = 20;
+shadow_height = 5;
+
+// save data:
+cow_id = id;
+// edited in child obj:
+cow_name = "Unnamed";
+cow_type = "Notype";
+cow_mood = 0.5;
 
 #region initiate state cycle with alarm:
 //alarm[0] = game_get_speed(gamespeed_fps) * (4 / 3);
@@ -67,8 +74,47 @@ function determine_next_state() {
 		} break;
 	}
 }
+	
+function determine_mood() {
+	// set multiplier values
+	var multiplier_patch = 1.5;
+	var multiplier_overcrowded = 0.8;
+	var multiplier_solitary = 0.25;
+	var points_accessory = 0.1;
+	
+	// initial mood value
+	cow_mood = 0.5;
+	var cow_mood_prev = cow_mood;
 
-//function determine_endpoint() {
-//	x_end = irandom_range(x - x_range, x + x_range);
-//	y_end = irandom_range(y - y_range, y + y_range);
-//}
+	// if cow's type matches their patch type, apply multiplier to mood
+	var save_data_local_temp = global.save_data_local;
+	var patches_array = save_data_local_temp.patches;
+	var found_patch = {};
+	for (var i = 0; i < array_length(patches_array); i++) {
+		var patch_struct = patches_array[i];
+		found_patch = patch_struct;
+		// if patch matches cow's patch (by patch grid x-coord)
+		if (patch_struct.xpos == global.tracked_cow.patch_x) { // <----------
+			// if patch type matches cow type
+			if (patch_struct.patch_type == cow_type) {
+				cow_mood *= 1.5;
+			}
+		}
+	}
+	
+	// if cow's patch is overcrowded, apply lesser multiplier to mood
+	if (found_patch.current_cows > 2) {
+		cow_mood *= 0.8;
+	}
+	// else if cow is alone in patch, apply lesser multiplier to mood
+	else if (found_patch.current_cows < 2) {
+		cow_mood *= 0.25;
+	}
+	
+	//// if cow has accessories, apply points
+	//if (cow_accessories > 0) {
+	//	cow_mood += 0.1;
+	//}
+	
+	show_debug_message("obj_par_cow DETERMINE_MOOD: cow_mood was "+string(cow_mood_prev)+". now it's "+string(cow_mood)+".");
+}

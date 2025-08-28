@@ -1,17 +1,19 @@
 {
   "$GMObject":"",
-  "%Name":"obj_patch",
-  "eventList":[],
+  "%Name":"obj_btn_upgrade_tree",
+  "eventList":[
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+  ],
   "managed":true,
-  "name":"obj_patch",
+  "name":"obj_btn_upgrade_tree",
   "overriddenProperties":[],
   "parent":{
-    "name":"Patches",
-    "path":"folders/Objects/Patches.yy",
+    "name":"Buttons",
+    "path":"folders/Objects/GUI/Buttons.yy",
   },
   "parentObjectId":{
-    "name":"obj_par_patch",
-    "path":"objects/obj_par_patch/obj_par_patch.yy",
+    "name":"obj_par_btns",
+    "path":"objects/obj_par_btns/obj_par_btns.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,
@@ -31,8 +33,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_patch",
-    "path":"sprites/spr_patch/spr_patch.yy",
+    "name":"spr_btn_upgrades_tree",
+    "path":"sprites/spr_btn_upgrades_tree/spr_btn_upgrades_tree.yy",
   },
   "spriteMaskId":null,
   "visible":true,
