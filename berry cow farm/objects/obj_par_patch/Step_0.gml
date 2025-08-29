@@ -50,7 +50,7 @@ if (ready_to_harvest) {
 }
 #endregion
 
-#region handle switching selected_patch with mouse press and operations
+#region handle mouse press operations and switching selected_patch
 // Get sprite dimensions
 var sprite_w = sprite_get_width(spr_patch);
 var sprite_h = sprite_get_height(spr_patch);
@@ -87,7 +87,7 @@ if (mouse_check_button_released(mb_left)) and (patch_pressed) and (global.tracke
 	//	// disable visual overlay
 	//	ready_to_harvest = false;
 	//	// add milk
-	//	obj_farm_manager.farm_milk += 100;
+	//	obj_farm_manager.milk_total += 100;
 	//	// restart timer
 	//	patch_timer_reset();
 	//} else {
@@ -109,10 +109,87 @@ if (mouse_check_button_released(mb_left)) and (patch_pressed) and (global.tracke
 	} else {
 		// disable visual overlay
 		ready_to_harvest = false;
-		// add milk
-		obj_farm_manager.farm_milk += 100;
+		
+		//// add milk (simple)
+		//obj_farm_manager.milk_total += 100;
+		
+		#region add milk (complex)
+		/*
+			consider individual milk types
+			100ml per cow
+			net mood of cows used as final multiplier
+			
+			so for Nana and BB
+			Nana		banana			100ml	* cow_count (2)	= 200ml		* net_mood (1.4) = 280ml
+			BB			blackberry		100ml	* cow_count (2)	= 200ml		* net_mood (1.4) = 280ml
+			
+			maybe each milk count should only be multiplied by net mood, unaffected by number of cows
+			Nana		banana			100ml	* net_mood (1.4) = 140ml
+			BB			blackberry		100ml	* net_mood (1.4) = 140ml
+		*/
+		
+		var net_mood = net_mood_in_patch();
+		var cow_list = ds_list_create();
+	    var cow_count = instance_place_list(x, y, obj_par_cow, cow_list, false);
+		var milk_produced_per_cow = obj_farm_manager.milk_base_amount * net_mood;
+		var milk_produced_total = 0;
+		// loop through list of cow instances
+		for (var i = 0; i < ds_list_size(cow_list); i++) {
+			// isolate each cow from the list of cow instances
+			var cow = ds_list_find_value(cow_list, i);
+			// with each cow
+			with (cow) {
+				// add to milk type total depending on cow type
+				switch (cow.cow_type) {
+					case "Banana": {
+						obj_farm_manager.milk_banana += milk_produced_per_cow;
+						milk_produced_total += milk_produced_per_cow;
+					} break;
+					case "Blackberry": {
+						obj_farm_manager.milk_blackberry += milk_produced_per_cow;
+						milk_produced_total += milk_produced_per_cow;
+					} break;
+					case "Blueberry": {
+						obj_farm_manager.milk_blueberry += milk_produced_per_cow;
+						milk_produced_total += milk_produced_per_cow;
+					} break;
+					case "Raspberry": {
+						obj_farm_manager.milk_raspberry += milk_produced_per_cow;
+						milk_produced_total += milk_produced_per_cow;
+					} break;
+					case "Strawberry": {
+						obj_farm_manager.milk_strawberry += milk_produced_per_cow;
+						milk_produced_total += milk_produced_per_cow;
+					} break;
+					default: {
+						show_debug_message("obj_par_patch STEP: error! cow type not recognised, no milk added!");
+					} break;
+				}
+			}
+		}
+		ds_list_destroy(cow_list);
+		
+		// now calculate total milk produced across all time
+		var temp_milk_total = (
+			obj_farm_manager.milk_banana +
+			obj_farm_manager.milk_blackberry +
+			obj_farm_manager.milk_blueberry +
+			obj_farm_manager.milk_raspberry +
+			obj_farm_manager.milk_strawberry
+		);
+		// clamp total value to milk capacity
+		obj_farm_manager.milk_total = clamp(temp_milk_total, 0, obj_farm_manager.milk_capacity);
+		
+		show_debug_message("obj_par_patch STEP: Patch with "+string(cow_count)+" cows with net mood of "+string(net_mood)+" produced "+string(milk_produced_total)+" in total");
+		show_debug_message("obj_par_patch STEP: Farm now has "+string(obj_farm_manager.milk_total)+" in total!");
+		#endregion
+		
 		// restart timer
 		patch_timer_reset();
+		
+		// save
+		obj_farm_manager.save_farm_data();
+		show_debug_message("obj_par_patch STEP: called save_farm_data() ...");
 	}
 }
 

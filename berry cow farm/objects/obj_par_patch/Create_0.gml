@@ -55,10 +55,7 @@ function patch_timer_reset() {
 }
 
 function start_patch_time() {
-	var cow_list = ds_list_create();
-    var cow_count = instance_place_list(x, y, obj_par_cow, cow_list, false);
-    ds_list_destroy(cow_list);
-    //return cow_count;
+	var cow_count = count_cows_in_patch();
 	production_duration = cow_count * patch_time_period_modifier;
 	
 	// start patch timer if there are cows inside
@@ -97,6 +94,30 @@ function resume_production_after_load(patch_id, time_remaining) {
         time_source_start(patch_time);
         patch_time_active = true;
 	}
+}
+	
+function count_cows_in_patch() {
+	var cow_list = ds_list_create();
+    var cow_count = instance_place_list(x, y, obj_par_cow, cow_list, false);
+    ds_list_destroy(cow_list);
+    return cow_count;
+}
+
+function net_mood_in_patch() {
+	var cow_list = ds_list_create();
+    var cow_count = instance_place_list(x, y, obj_par_cow, cow_list, false);
+	var net_mood = 0;
+	for (var i = 0; i < ds_list_size(cow_list); i++) {
+		var cow = ds_list_find_value(cow_list, i);
+		with (cow) {
+			net_mood += cow.cow_mood;
+		}
+	}
+	//with (cow_list) {
+	//	net_mood += cow_count.cow_mood;
+	//}
+	ds_list_destroy(cow_list);
+	return net_mood;
 }
 
 #region create patch collision objects for each patch

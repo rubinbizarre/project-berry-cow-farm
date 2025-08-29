@@ -93,7 +93,7 @@ switch (room) {
 			draw_set_halign(fa_right);
 			draw_text_transformed(display_get_gui_width()/2-60, border, "$"+string(obj_farm_manager.farm_money), 0.8, 0.9, 0);
 			draw_set_halign(fa_left);
-			draw_text_transformed(display_get_gui_width()/2+60, border, "Milk: "+string(obj_farm_manager.farm_milk)+"ml", 0.8, 0.9, 0);
+			draw_text_transformed(display_get_gui_width()/2+60, border, "Milk: "+string(obj_farm_manager.milk_total)+"ml", 0.8, 0.9, 0);
 			draw_set_halign(prev_halign);
 		}
 		#endregion

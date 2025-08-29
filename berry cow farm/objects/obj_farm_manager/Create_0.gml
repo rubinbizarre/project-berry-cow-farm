@@ -6,13 +6,28 @@ autosave_period = 30; // in seconds
 
 camera = view_camera[0];
 
-// Game state variables
+// Default game state variables
+milk_capacity = 5000;
+milk_total = 0;
+milk_banana = 0;
+milk_blackberry = 0;
+milk_blueberry = 0;
+milk_raspberry = 0;
+milk_strawberry = 0;
 farm_level = 1;
-farm_milk = 2000;
 farm_money = 1000;
 patch_size = 256; // Size of each patch in pixels
 grid_origin_x = room_width / 2;  // Center the grid in the room
 grid_origin_y = room_height / 2;
+milk_base_amount = 100;
+
+// for milk pie chart surface
+milk_surface = -1;
+milk_total_previous = 0;
+milk_chart_r1 = 50;
+milk_chart_r2 = 100;
+milk_chart_capacity_r1 = 110;
+milk_chart_capacity_r2 = 120;
 
 // Initialize session
 //create_starting_farm(); // moved to load_farm_data and runs if save does not exist
@@ -30,7 +45,13 @@ function save_farm_data() {
     // Basic farm info
     ds_map_add(save_data, "money", farm_money);
     ds_map_add(save_data, "level", farm_level);
-	ds_map_add(save_data, "milk", farm_milk);
+	ds_map_add(save_data, "milk", milk_total);
+	ds_map_add(save_data, "milk_capacity", milk_capacity);
+	ds_map_add(save_data, "milk_banana", milk_banana);
+	ds_map_add(save_data, "milk_blackberry", milk_blackberry);
+	ds_map_add(save_data, "milk_blueberry", milk_blueberry);
+	ds_map_add(save_data, "milk_raspberry", milk_raspberry);
+	ds_map_add(save_data, "milk_strawberry", milk_strawberry);
     ds_map_add(save_data, "last_save", date_current_datetime());
     
     #region Save patches as array
@@ -166,12 +187,24 @@ function load_farm_data() {
 	show_debug_message("obj_farm_manager CREATE: load_farm_data(): called clear_farm_data() ...");
     
     // Load basic info
-	farm_money = save_data.money;
-	farm_level = save_data.level;
-	farm_milk = save_data.milk;
+	farm_money =		save_data.money;
+	farm_level =		save_data.level;
+	milk_total =		save_data.milk;
+	milk_capacity =		save_data.milk_capacity;
+	milk_banana =		save_data.milk_banana;
+	milk_blackberry =	save_data.milk_blackberry;
+	milk_blueberry =	save_data.milk_blueberry;
+	milk_raspberry =	save_data.milk_raspberry;
+	milk_strawberry =	save_data.milk_strawberry;
 	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded farm_money: "+string(farm_money));
 	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded farm_level: "+string(farm_level));
-	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded farm_milk: "+string(farm_milk));
+	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded milk_total: "+string(milk_total));
+	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded milk_capacity: "+string(milk_capacity));
+	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded milk_banana: "+string(milk_banana));
+	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded milk_blackberry: "+string(milk_blackberry));
+	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded milk_blueberry: "+string(milk_blueberry));
+	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded milk_raspberry: "+string(milk_raspberry));
+	show_debug_message("obj_farm_manager CREATE: load_farm_data(): loaded milk_strawberry: "+string(milk_strawberry));
     
     #region Load patches from array
     var patches_array = save_data.patches;
@@ -577,4 +610,42 @@ function cleanup_farm_manager() {
     ds_map_destroy(patches_map);
     ds_list_destroy(cows_list);
     ds_list_destroy(empty_cells_list);
+}
+
+/// @func make_milk_chart(cx, cy, r1, r2, values, colors)
+function make_milk_chart(cx, cy, r1, r2, values, colors)
+{
+    // Destroy old surface if it exists
+    if (surface_exists(milk_surface)) surface_free(milk_surface);
+
+    // Create new surface big enough for the chart
+    milk_surface = surface_create(milk_chart_capacity_r2 * 2, milk_chart_capacity_r2 * 2);
+
+    surface_set_target(milk_surface);
+    draw_clear_alpha(c_black, 0); // transparent background
+
+    var total = 0;
+    for (var i = 0; i < array_length(values); i++) total += values[i];
+	
+	// draw pie portions representing individual milk types against total milk
+    var start_angle = 90;
+    for (var i = 0; i < array_length(values); i++)
+    {
+        var portion = values[i] / total;
+        var angle = 360 * portion;
+        draw_pie_slice(milk_chart_capacity_r2, milk_chart_capacity_r2, r1, r2, start_angle, start_angle + angle, colors[i]);
+        start_angle += angle;
+    }
+	
+	// draw outer pie portions representing total milk against milk capacity
+	start_angle = 90;
+	var portion = milk_total / milk_capacity;
+	var angle = 360 * portion;
+	draw_pie_slice(milk_chart_capacity_r2, milk_chart_capacity_r2, milk_chart_capacity_r1, milk_chart_capacity_r2, start_angle, start_angle + angle, c_white);
+	start_angle += angle;
+	var last_portion = 1 - portion;
+	angle = 360 * last_portion;
+	draw_pie_slice(milk_chart_capacity_r2, milk_chart_capacity_r2, milk_chart_capacity_r1, milk_chart_capacity_r2, start_angle, start_angle + angle, c_gray);
+
+    surface_reset_target();
 }
