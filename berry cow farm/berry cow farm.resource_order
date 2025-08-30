@@ -35,6 +35,7 @@
   "ResourceOrderSettings":[
     {"name":"font_custom","order":1,"path":"fonts/font_custom/font_custom.yy",},
     {"name":"obj_btn_cancel","order":3,"path":"objects/obj_btn_cancel/obj_btn_cancel.yy",},
+    {"name":"obj_btn_milk","order":4,"path":"objects/obj_btn_milk/obj_btn_milk.yy",},
     {"name":"obj_btn_patch_edit","order":1,"path":"objects/obj_btn_patch_edit/obj_btn_patch_edit.yy",},
     {"name":"obj_btn_upgrade_tree","order":2,"path":"objects/obj_btn_upgrade_tree/obj_btn_upgrade_tree.yy",},
     {"name":"obj_collision","order":1,"path":"objects/obj_collision/obj_collision.yy",},
@@ -76,6 +77,7 @@
     {"name":"spr_fence_vertical","order":1,"path":"sprites/spr_fence_vertical/spr_fence_vertical.yy",},
     {"name":"spr_haybale_shadow","order":3,"path":"sprites/spr_haybale_shadow/spr_haybale_shadow.yy",},
     {"name":"spr_haybale","order":2,"path":"sprites/spr_haybale/spr_haybale.yy",},
+    {"name":"spr_milk_bucket_button","order":9,"path":"sprites/spr_milk_bucket_button/spr_milk_bucket_button.yy",},
     {"name":"spr_milk_bucket","order":5,"path":"sprites/spr_milk_bucket/spr_milk_bucket.yy",},
     {"name":"spr_mood_slider","order":8,"path":"sprites/spr_mood_slider/spr_mood_slider.yy",},
     {"name":"spr_patch_barn","order":3,"path":"sprites/spr_patch_barn/spr_patch_barn.yy",},

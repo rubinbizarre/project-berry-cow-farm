@@ -1,41 +1,35 @@
-//draw_pie_slice(
-//	display_get_gui_width()/5,
-//	display_get_gui_height()/2,
-//	100,
-//	300,
-//	0,
-//	-90,
-//	c_navy
-//);
-
-//draw_set_color(c_white);
-
-
-//if (surface_exists(milk_surface))
-//{
-//    draw_surface(milk_surface, 200 - 80, 200 - 80); // center at (200,200)
-//}
-
-//// Optional: text in the donut hole
-//draw_set_halign(fa_center);
-//draw_set_valign(fa_middle);
-//draw_set_color(c_white);
-//draw_text(200, 200, string(milk_total) + "/" + "99999"); // string(max_capacity));
-
-
-//// working
-//var start_angle = -90;
-
-//var angle_banana = 360 * (milk_banana / milk_total); // 360 * 0.5 = 180
-//draw_pie_slice(200, view_get_hport(0)/2, 40, 80, start_angle, start_angle + angle_banana, c_yellow);
-//start_angle += angle_banana;
-
-//var angle_blackberry = 360 * (milk_blackberry / milk_total);
-//draw_pie_slice(200, view_get_hport(0)/2, 40, 80, start_angle, start_angle + angle_blackberry, c_purple);
-
-//draw_set_color(c_white);
-
-
-if (surface_exists(milk_surface)) {
-    draw_surface(milk_surface, 200 - milk_chart_r2, 200 - milk_chart_r2); // center on 200
+if (surface_exists(milk_surface)) and (milk_chart_active) {
+    // draw donut pie chart
+	draw_surface(milk_surface, 200 - milk_chart_r2, 200 - milk_chart_r2); // center on 200
+	
+	// draw text info
+	var text_xscale = 0.8;
+	var text_yscale = 0.9;
+	var text_ypos = 400;
+	var milk_array = [milk_banana, milk_blackberry, milk_blueberry, milk_raspberry, milk_strawberry];
+	
+	for (var i = 0; i < array_length(milk_array); i++) {
+		if (milk_array[i] > 0) {
+			var milk_amount = string(milk_array[i]);
+			var milk_type = "";
+			var milk_color = c_white;
+			switch (i) {
+				case 0: milk_type = "Banana"; milk_color = #fedf6a;
+				break;
+				case 1: milk_type = "Blackberry"; milk_color = #d0b1eb;
+				break;
+				case 2: milk_type = "Blueberry"; milk_color = #927ddd;
+				break;
+				case 3: milk_type = "Raspberry"; milk_color = #f49bce;
+				break;
+				case 4: milk_type = "Strawberry"; milk_color = #d36b9b;
+				break;
+			}
+			draw_set_color(milk_color);
+			draw_rectangle(140, text_ypos, 170, text_ypos + 30, false);
+			draw_set_color(c_white);
+			draw_text_ext_transformed(200, text_ypos, milk_type + "\n" + milk_amount, 50, 999, text_xscale, text_yscale, 0);
+			text_ypos += 120;
+		}
+	}
 }

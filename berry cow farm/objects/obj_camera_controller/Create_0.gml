@@ -18,9 +18,9 @@ zoom_2_w = 480;
 zoom_2_h = 270;
 zoom_3_w = 320;
 zoom_3_h = 180;
-zoom_current_w = zoom_0_w;
-zoom_current_h = zoom_0_h;
-zoom_level = 0;
+zoom_current_w = zoom_1_w;
+zoom_current_h = zoom_1_h;
+zoom_level = 1;
 
 // set camera zoom level
 camera_set_view_size(camera, zoom_current_w, zoom_current_h);

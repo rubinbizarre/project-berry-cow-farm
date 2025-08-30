@@ -28,6 +28,7 @@ milk_chart_r1 = 50;
 milk_chart_r2 = 100;
 milk_chart_capacity_r1 = 110;
 milk_chart_capacity_r2 = 120;
+milk_chart_active = false;
 
 // Initialize session
 //create_starting_farm(); // moved to load_farm_data and runs if save does not exist
@@ -221,23 +222,6 @@ function load_farm_data() {
 			patch_struct.duration,
 			patch_struct.is_ready_to_harvest
 		);
-		
-		//// Handle persistent timer data
-	    //var patch_inst = instance_position(patch_struct.xpos, patch_struct.ypos, obj_par_patch);
-	    //if (instance_exists(patch_inst)) and (patch_struct.time_remaining > 0) {
-	    //    //// Load persistent timer data if it exists
-	    //    //if (struct_exists(patch_struct, "production_start_time")) {
-	    //    //    patch_inst.production_start_time = patch_struct.production_start_time;
-	    //    //    patch_inst.production_duration = patch_struct.production_duration;
-	    //    //    patch_inst.ready_to_harvest = patch_struct.ready_to_harvest;
-	    //    //}
-		//	//patch_inst.production_start_time = patch_struct.production_start_time;
-	    //    //patch_inst.production_duration = patch_struct.production_duration;
-	    //    //patch_inst.ready_to_harvest = patch_struct.ready_to_harvest;
-	    //    // Resume production with correct timing
-	    //    patch_inst.resume_production_after_load();
-		//	show_debug_message("obj_farm_manager CREATE: load_farm_data(): Patch at "+string(patch_struct.xpos)+","+string(patch_struct.ypos)+" was told to resume production");
-	    //}
 		
 		patch_inst.resume_production_after_load(patch_inst.id, patch_struct.time_remaining);
 		
@@ -648,4 +632,8 @@ function make_milk_chart(cx, cy, r1, r2, values, colors)
 	draw_pie_slice(milk_chart_capacity_r2, milk_chart_capacity_r2, milk_chart_capacity_r1, milk_chart_capacity_r2, start_angle, start_angle + angle, c_gray);
 
     surface_reset_target();
+}
+
+function make_jobs_window() {
+	//...
 }

@@ -64,14 +64,25 @@ patch_hover = point_in_rectangle(
 
 // Handle click
 if (mouse_check_button_pressed(mb_left)) {
-	// if hovering over patch while clicking, make patch pressed true (setup for mouse-release to do action)
-	if (patch_hover) {
-		if (!patch_pressed) patch_pressed = true;
-		show_debug_message("obj_par_patch STEP: "+string(id)+" patch clicked! Patch pressed");
-	} else { // else if click elsewhere, reset selected_patch_id
-		if (selected_patch_id != noone) {
-			selected_patch_id = noone;
-			show_debug_message("obj_par_patch STEP: Clicked outside of "+string(id)+"! Selected patch: "+string(selected_patch_id));
+	// loop through buttons to see if mouse is over them
+	var mouse_over_btn = 0;
+	for (var i = 0; i < instance_number(obj_par_btns); i++) {
+		var btn_inst = instance_find(obj_par_btns, i);
+		if (btn_inst.btn_hover == 1) { if (mouse_over_btn != 1) mouse_over_btn = 1; }
+	}
+	// if mouse isn't over any of the buttons
+	if (!mouse_over_btn) {
+		// if hovering over patch while clicking, make patch pressed true (setup for mouse-release to do action)
+		if (patch_hover) {
+			if (!patch_pressed) {
+				patch_pressed = true;
+				show_debug_message("obj_par_patch STEP: "+string(id)+" patch clicked! Patch pressed");
+			}
+		} else { // else if click elsewhere, reset selected_patch_id
+			if (selected_patch_id != noone) {
+				selected_patch_id = noone;
+				show_debug_message("obj_par_patch STEP: Clicked outside of "+string(id)+"! Selected patch: "+string(selected_patch_id));
+			}
 		}
 	}
 }

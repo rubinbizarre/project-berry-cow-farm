@@ -1,0 +1,1 @@
+milk_chart_active = !milk_chart_active;

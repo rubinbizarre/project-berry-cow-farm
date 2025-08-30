@@ -1,11 +1,13 @@
 {
   "$GMObject":"",
-  "%Name":"obj_btn_patch_edit",
+  "%Name":"obj_btn_milk",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":64,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_btn_patch_edit",
+  "name":"obj_btn_milk",
   "overriddenProperties":[],
   "parent":{
     "name":"Buttons",
@@ -33,8 +35,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_btn_patch_edit",
-    "path":"sprites/spr_btn_patch_edit/spr_btn_patch_edit.yy",
+    "name":"spr_milk_bucket_button",
+    "path":"sprites/spr_milk_bucket_button/spr_milk_bucket_button.yy",
   },
   "spriteMaskId":null,
   "visible":true,

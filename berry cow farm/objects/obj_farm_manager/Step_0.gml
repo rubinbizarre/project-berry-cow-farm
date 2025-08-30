@@ -6,7 +6,7 @@ if (milk_total != milk_total_previous) or (!surface_exists(milk_surface)) {
 		milk_chart_r1,
 		milk_chart_r2,
 		[milk_banana, milk_blackberry, milk_blueberry, milk_raspberry, milk_strawberry],
-		[c_yellow, c_purple, c_blue, c_fuchsia, c_red]
+		[ #fedf6a, #d0b1eb, #927ddd, #f49bce, #d36b9b ]
 	);
 	
     milk_total_previous = milk_total;

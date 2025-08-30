@@ -26,7 +26,7 @@ patch_time_period_modifier = 3;
 //patch_time_remaining = 0; // assigned in step event
 //patch_time_period = 0; // count_cows_in_patch() * 3; // not detecting cow instances in this create event
 
-// NEW: Add persistent timer variables
+// add persistent timer variables
 production_start_time = 0;
 production_duration = 0;
 production_time_remaining = 0;

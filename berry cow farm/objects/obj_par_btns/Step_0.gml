@@ -11,6 +11,12 @@ btn_hover = point_in_rectangle(gui_mouse_x, gui_mouse_y,
                                  btn_x, btn_y, 
                                  btn_x + sprite_w, btn_y + sprite_h);
 
+//if (btn_hover) {
+//	if (btn_at_hover != id) btn_at_hover = id;
+//} else {
+//	if (btn_at_hover != noone) btn_at_hover = noone;
+//}
+
 // Handle click
 if (btn_hover and mouse_check_button_pressed(mb_left)) {
 	btn_pressed = true;

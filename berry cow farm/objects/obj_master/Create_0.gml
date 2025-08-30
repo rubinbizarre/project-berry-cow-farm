@@ -1,6 +1,6 @@
 randomize();
 
-global.debug = 1;
+global.debug = 0;
 
 global.shadow_alpha = 0.4;
 

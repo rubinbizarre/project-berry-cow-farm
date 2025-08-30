@@ -79,23 +79,23 @@ switch (room) {
 			if (obj_btn_patch_edit.btn_activated) {
 				var prev_halign = draw_get_halign();
 				draw_set_halign(fa_center);
-				draw_text(display_get_gui_width()/2, 40, "Patch Edit Mode");
+				draw_text_transformed(display_get_gui_width()/2, display_get_gui_height()-60, "Patch Edit Mode", 0.8, 0.9, 0);
 				draw_set_halign(prev_halign);
 			}
 		}
 		#endregion
 
 		#region draw fundamental vars: money, level, milk
-		if (!global.debug) {
+		//if (!global.debug) {
 			var border = 40;
-			draw_text_transformed(border, border, "Farm Level: "+string(obj_farm_manager.farm_level), 0.8, 0.9, 0);
+			//draw_text_transformed(border, border, "Farm Level: "+string(obj_farm_manager.farm_level), 0.8, 0.9, 0);
 			var prev_halign = draw_get_halign();
 			draw_set_halign(fa_right);
-			draw_text_transformed(display_get_gui_width()/2-60, border, "$"+string(obj_farm_manager.farm_money), 0.8, 0.9, 0);
+			draw_text_transformed(display_get_gui_width()/2-60, border, "$"+string(obj_farm_manager.farm_money), 0.9, 1, 0);
 			draw_set_halign(fa_left);
-			draw_text_transformed(display_get_gui_width()/2+60, border, "Milk: "+string(obj_farm_manager.milk_total)+"ml", 0.8, 0.9, 0);
+			draw_text_transformed(display_get_gui_width()/2+100, border, string(obj_farm_manager.milk_total)+"ml", 0.9, 1, 0);
 			draw_set_halign(prev_halign);
-		}
+		//}
 		#endregion
 
 		#region draw selected patch card with info (commented) (moved to obj_par_patch)

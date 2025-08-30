@@ -150,6 +150,9 @@ if (mouse_check_button_released(mb_left)) and (cow_dragging) {
 	cow_state = COW_STATE.IDLE;
 	alarm[0] = game_get_speed(gamespeed_fps) * delay_idle;
 	show_debug_message("obj_par_cow STEP: cow behaviour reset");
+	// if placed in a different patch, echo that change in save data, make persistent
+	//var new_patch = instance_position(mouse_x, mouse_y, obj_par_patch);
+	//...
 }
 
 // if mouse moves from initial pos while dragging, then move cow pos
