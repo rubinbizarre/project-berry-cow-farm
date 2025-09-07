@@ -1,19 +1,19 @@
 {
   "$GMObject":"",
-  "%Name":"obj_btn_cancel",
+  "%Name":"obj_window_milk",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_btn_cancel",
+  "name":"obj_window_milk",
   "overriddenProperties":[],
   "parent":{
-    "name":"Buttons",
-    "path":"folders/Objects/GUI/Buttons.yy",
+    "name":"GUI",
+    "path":"folders/Objects/GUI.yy",
   },
   "parentObjectId":{
-    "name":"obj_par_btns",
-    "path":"objects/obj_par_btns/obj_par_btns.yy",
+    "name":"obj_par_window",
+    "path":"objects/obj_par_window/obj_par_window.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,
@@ -33,8 +33,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_btn_cancel",
-    "path":"sprites/spr_btn_cancel/spr_btn_cancel.yy",
+    "name":"spr_window_milk",
+    "path":"sprites/spr_window_milk/spr_window_milk.yy",
   },
   "spriteMaskId":null,
   "visible":true,

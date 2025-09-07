@@ -1,7 +1,7 @@
 // switched from draw event to draw end event due to overlapping sprites
 
 // if a patch is selected, draw it as well as the selected sprite
-if (selected_patch_id != noone) {
+if (obj_gui_manager.selected_patch_id != noone) {
 	#region apply thick, blinking highlight border - see step event (working) (commented)
 	//draw_set_alpha(border_alpha);
 	//draw_rectangle_color(
@@ -14,8 +14,8 @@ if (selected_patch_id != noone) {
 	//draw_set_alpha(1);
 	//draw_self();
 	#endregion
-	
-	draw_sprite(spr_patch_selected, 0, x, y);
+	var patch = obj_gui_manager.selected_patch_id;
+	draw_sprite(spr_patch_selected, 0, patch.x, patch.y);
 }
 
 // if patch is harvestable, draw an effect to indicate so

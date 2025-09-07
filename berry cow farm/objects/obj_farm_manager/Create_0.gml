@@ -24,10 +24,11 @@ milk_base_amount = 100;
 // for milk pie chart surface
 milk_surface = -1;
 milk_total_previous = 0;
-milk_chart_r1 = 50;
-milk_chart_r2 = 100;
-milk_chart_capacity_r1 = 110;
-milk_chart_capacity_r2 = 120;
+chart_scale_factor = 1.5;
+milk_chart_r1 = 50 * chart_scale_factor;
+milk_chart_r2 = 100 * chart_scale_factor;
+milk_chart_capacity_r1 = 110 * chart_scale_factor;
+milk_chart_capacity_r2 = 120 * chart_scale_factor;
 milk_chart_active = false;
 
 // Initialize session
@@ -597,24 +598,32 @@ function cleanup_farm_manager() {
 }
 
 /// @func make_milk_chart(cx, cy, r1, r2, values, colors)
-function make_milk_chart(cx, cy, r1, r2, values, colors)
-{
+function make_milk_chart(cx, cy, r1, r2, values, colors) {
     // Destroy old surface if it exists
     if (surface_exists(milk_surface)) surface_free(milk_surface);
 
     // Create new surface big enough for the chart
-    milk_surface = surface_create(milk_chart_capacity_r2 * 2, milk_chart_capacity_r2 * 2);
-
+    //milk_surface = surface_create(milk_chart_capacity_r2 * 2, milk_chart_capacity_r2 * 2);
+	//milk_surface = surface_create(milk_chart_capacity_r2 * 20, milk_chart_capacity_r2 * 20);
+	milk_surface = surface_create(sprite_get_width(spr_window_milk), sprite_get_height(spr_window_milk));
+	
     surface_set_target(milk_surface);
+	
     draw_clear_alpha(c_black, 0); // transparent background
-
+	
+	//// debug: see milk_surface area
+	//draw_set_alpha(0.5);
+	//draw_set_color(c_black);
+	//draw_rectangle(0, 0, sprite_get_width(spr_window_milk), sprite_get_height(spr_window_milk), false);
+	//draw_set_alpha(1);
+	//draw_set_color(c_white);
+	
     var total = 0;
     for (var i = 0; i < array_length(values); i++) total += values[i];
 	
 	// draw pie portions representing individual milk types against total milk
     var start_angle = 90;
-    for (var i = 0; i < array_length(values); i++)
-    {
+    for (var i = 0; i < array_length(values); i++) {
         var portion = values[i] / total;
         var angle = 360 * portion;
         draw_pie_slice(milk_chart_capacity_r2, milk_chart_capacity_r2, r1, r2, start_angle, start_angle + angle, colors[i]);
@@ -631,6 +640,67 @@ function make_milk_chart(cx, cy, r1, r2, values, colors)
 	angle = 360 * last_portion;
 	draw_pie_slice(milk_chart_capacity_r2, milk_chart_capacity_r2, milk_chart_capacity_r1, milk_chart_capacity_r2, start_angle, start_angle + angle, c_gray);
 
+	#region draw text info with coloured rectangle key for each milk type
+	// e.g. [PURPLE] Blackberry 2000, [YELLOW] Banana 1500, etc...
+	var prev_font = draw_get_font();
+	draw_set_font(font_custom);
+	var text_xscale = 0.8;
+	var text_yscale = 0.9;
+	var text_xpos = (milk_chart_capacity_r2 * 2) + 100;
+	var text_ypos = 0;
+	var milk_array = [
+		obj_farm_manager.milk_banana,
+		obj_farm_manager.milk_blackberry,
+		obj_farm_manager.milk_blueberry,
+		obj_farm_manager.milk_raspberry,
+		obj_farm_manager.milk_strawberry
+	];
+	
+	// draw milk flavours heading
+	var prev_color = draw_get_color();
+	draw_set_color(c_white);
+	draw_text_transformed(text_xpos-50, text_ypos, "milk flavors", text_xscale, text_yscale, 0);
+	draw_rectangle(text_xpos-52, text_ypos+35, text_xpos+255, text_ypos+40, false); // underline
+	// draw total milk text, white square, values
+	//draw_set_halign(fa_center);
+	draw_rectangle(35, (milk_chart_capacity_r2 * 2) + 40 - 3, 35 + 30, (milk_chart_capacity_r2 * 2) + 40 - 3 + 30, false);
+	draw_text_transformed(80, (milk_chart_capacity_r2 * 2) + 40, "Total Milk", text_xscale, text_yscale, 0);
+	draw_set_halign(fa_center);
+	draw_text_transformed(milk_chart_capacity_r2, (milk_chart_capacity_r2 * 2) + 100, string(obj_farm_manager.milk_total), text_xscale, text_yscale, 0);
+	draw_rectangle(milk_chart_capacity_r2 - 50, (milk_chart_capacity_r2 * 2) + 140, milk_chart_capacity_r2 + 50, (milk_chart_capacity_r2 * 2) + 140 + 5, false); // divider line
+	draw_text_transformed(milk_chart_capacity_r2, (milk_chart_capacity_r2 * 2) + 160, string(obj_farm_manager.milk_capacity), text_xscale, text_yscale, 0);
+	draw_set_halign(fa_left);
+	draw_set_color(prev_color);
+	
+	text_ypos += 80;
+	
+	for (var i = 0; i < array_length(milk_array); i++) {
+		if (milk_array[i] > 0) {
+			var milk_amount = string(milk_array[i]);
+			var milk_type = "";
+			var milk_color = c_white;
+			switch (i) {
+				case 0: milk_type = "Banana"; milk_color = #fedf6a;
+				break;
+				case 1: milk_type = "Blackberry"; milk_color = #d0b1eb;
+				break;
+				case 2: milk_type = "Blueberry"; milk_color = #927ddd;
+				break;
+				case 3: milk_type = "Raspberry"; milk_color = #f49bce;
+				break;
+				case 4: milk_type = "Strawberry"; milk_color = #d36b9b;
+				break;
+			}
+			draw_set_color(milk_color);
+			draw_rectangle(text_xpos-50, text_ypos-3, text_xpos-20, text_ypos-3 + 30, false);
+			draw_set_color(c_white);
+			draw_text_ext_transformed(text_xpos, text_ypos, milk_type + "\n" + milk_amount, 50, 999, text_xscale, text_yscale, 0);
+			text_ypos += 120;
+		}
+	}
+	draw_set_font(prev_font);
+	#endregion
+	
     surface_reset_target();
 }
 

@@ -12,4 +12,4 @@ if (btn_is_toggle) {
 }
 
 // Draw button sprite
-draw_sprite_ext(btn_sprite, subimage, btn_x, btn_y, btn_scale, btn_scale, 0, c_white, 1);
+draw_sprite_ext(gui_sprite, subimage, gui_x, gui_y, btn_scale, btn_scale, 0, c_white, 1);

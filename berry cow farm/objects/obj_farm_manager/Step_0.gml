@@ -1,5 +1,5 @@
 if (milk_total != milk_total_previous) or (!surface_exists(milk_surface)) {
-	// make milk chart surface
+	// recreate milk chart surface when milk_total changes or surface doesn't exist
     make_milk_chart(
 		200,
 		200,//view_get_hport(0)/2,

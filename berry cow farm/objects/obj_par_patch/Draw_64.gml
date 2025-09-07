@@ -24,7 +24,7 @@
 //}
 
 #region draw selected patch card with info
-if (selected_patch_id != noone) {
+if (obj_gui_manager.selected_patch_id != noone) {
 	var card_sprite_x = display_get_gui_width()/2;
 	var card_sprite_y = display_get_gui_height() - sprite_get_height(spr_card_patch)/2 - 10;
 	
@@ -40,13 +40,14 @@ if (selected_patch_id != noone) {
 	draw_set_valign(fa_middle);
 	var line_offset = 25;
 	
+	var patch = obj_gui_manager.selected_patch_id;
 	// write patch name
-	draw_text_transformed(card_sprite_x, card_sprite_y - line_offset, selected_patch_id.patch_name, 0.8, 1, 0);
+	draw_text_transformed(card_sprite_x, card_sprite_y - line_offset, patch.patch_name, 0.8, 1, 0);
 	// write production time status / remaining secs
-	if (selected_patch_id.ready_to_harvest) {
+	if (patch.ready_to_harvest) {
 		draw_text_transformed(card_sprite_x, card_sprite_y + line_offset, "DONE!", 0.8, 1, 0);
 	} else {
-		draw_text_transformed(card_sprite_x, card_sprite_y + line_offset, string(int64(selected_patch_id.production_time_remaining)), 1, 1, 0);
+		draw_text_transformed(card_sprite_x, card_sprite_y + line_offset, string(int64(patch.production_time_remaining)), 1, 1, 0);
 	}
 	
 	// cleanup

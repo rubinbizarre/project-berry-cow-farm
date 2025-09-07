@@ -1,9 +1,7 @@
 // Inherit the parent event
 event_inherited();
 
-gui_y = display_get_gui_height() - sprite_height - 20;
-gui_sprite = spr_zoom_slider;
-
 function handle_click() {
 	btn_pressed = true;
+	show_debug_message("obj_btn_cancel handle_click(): btn pressed!");
 }

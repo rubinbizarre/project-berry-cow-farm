@@ -62,30 +62,40 @@ patch_hover = point_in_rectangle(
     x + sprite_w/2, y + sprite_h/2
 );
 
-// Handle click
-if (mouse_check_button_pressed(mb_left)) {
-	// loop through buttons to see if mouse is over them
-	var mouse_over_btn = 0;
-	for (var i = 0; i < instance_number(obj_par_btns); i++) {
-		var btn_inst = instance_find(obj_par_btns, i);
-		if (btn_inst.btn_hover == 1) { if (mouse_over_btn != 1) mouse_over_btn = 1; }
-	}
-	// if mouse isn't over any of the buttons
-	if (!mouse_over_btn) {
-		// if hovering over patch while clicking, make patch pressed true (setup for mouse-release to do action)
-		if (patch_hover) {
-			if (!patch_pressed) {
-				patch_pressed = true;
-				show_debug_message("obj_par_patch STEP: "+string(id)+" patch clicked! Patch pressed");
-			}
-		} else { // else if click elsewhere, reset selected_patch_id
-			if (selected_patch_id != noone) {
-				selected_patch_id = noone;
-				show_debug_message("obj_par_patch STEP: Clicked outside of "+string(id)+"! Selected patch: "+string(selected_patch_id));
-			}
-		}
-	}
-}
+//// Handle click (commented) moved to handle_click() tied to obj_gui_manager
+//if (mouse_check_button_pressed(mb_left)) {
+//	// loop through buttons to see if mouse is over them
+//	var mouse_over_btn = 0;
+//	for (var i = 0; i < instance_number(obj_par_btns); i++) {
+//		var btn_inst = instance_find(obj_par_btns, i);
+//		if (btn_inst.btn_hover == 1) { if (mouse_over_btn != 1) mouse_over_btn = 1; }
+//	}
+	
+//	//// loop through windows to see if mouse is over them wip
+//	//var mouse_over_window = 0;
+//	//for (var i = 0; i < instance_number(obj_par_window); i++) {
+//	//	var window_inst = instance_find(obj_par_window, i);
+//	//	if (window_inst.window_hover == 1) or (window_inst.cancel_hover == 1) {
+//	//		if (mouse_over_window != 1) mouse_over_window = 1;
+//	//	}
+//	//}
+	
+//	// if mouse isn't over any of the buttons
+//	if (!mouse_over_btn) {
+//		// if hovering over patch while clicking, make patch pressed true (setup for mouse-release to do action)
+//		if (patch_hover) {
+//			if (!patch_pressed) {
+//				patch_pressed = true;
+//				show_debug_message("obj_par_patch STEP: "+string(id)+" patch clicked! Patch pressed");
+//			}
+//		} else { // else if click elsewhere, reset selected_patch_id
+//			if (selected_patch_id != noone) {
+//				selected_patch_id = noone;
+//				show_debug_message("obj_par_patch STEP: Clicked outside of "+string(id)+"! Selected patch: "+string(selected_patch_id));
+//			}
+//		}
+//	}
+//}
 
 // Do action and reset pressed state when released while pressed
 // if releasing on top of a patch while pressed and while not tracking a cow,
@@ -111,13 +121,13 @@ if (mouse_check_button_released(mb_left)) and (patch_pressed) and (global.tracke
 	//}
 	
 	if (!ready_to_harvest) {
-		// if no patch is selected,
-		if (selected_patch_id == noone) {
+		// if no patch is already selected and its not ready to harvest
+		if (obj_gui_manager.selected_patch_id == noone) {
 			// make the selected_patch_id the patch user clicked on.
-			selected_patch_id = id;
-			show_debug_message("obj_par_patch STEP: "+string(id)+" patch clicked + released! Selected patch: "+string(selected_patch_id));
+			obj_gui_manager.selected_patch_id = id;
+			show_debug_message("obj_par_patch STEP: "+string(id)+" patch clicked + released! Selected patch: "+string(obj_gui_manager.selected_patch_id));
 		}
-	} else {
+	} else { // if patch is ready to harvest
 		// disable visual overlay
 		ready_to_harvest = false;
 		

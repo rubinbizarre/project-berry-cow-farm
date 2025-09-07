@@ -13,7 +13,7 @@ harvest_alpha_switch = false;
 
 patch_pressed = false;
 patch_hover = false;
-selected_patch_id = noone;
+//selected_patch_id = noone;
 
 // default values
 patch_sprite = spr_patch;
@@ -31,6 +31,40 @@ production_start_time = 0;
 production_duration = 0;
 production_time_remaining = 0;
 ready_to_harvest = false;
+
+// push gui instance id to gui manager upon creation
+// for layered gui click handling purposes
+if (instance_exists(obj_gui_manager)) {
+	array_push(obj_gui_manager.gui_elements, id);
+}
+
+function check_gui_click() {
+    var mx = device_mouse_x_to_gui(0);
+    var my = device_mouse_y_to_gui(0);
+    
+	var sprite_w = sprite_get_width(spr_patch);
+	var sprite_h = sprite_get_height(spr_patch);
+	
+	if (point_in_rectangle(mouse_x, mouse_y, x - sprite_w/2, y - sprite_h/2, x + sprite_w/2, y + sprite_h/2)) {
+        handle_click();
+		//show_debug_message("obj_par_btns check_gui_click(): "+string(id)+" called handle_click()");
+        return true;
+    }
+	//show_debug_message("obj_par_btns check_gui_click(): "+string(id)+" did not call handle_click()");
+    return false;
+}
+
+function handle_click() {
+	if (patch_hover) and (!patch_pressed) {
+		patch_pressed = true;
+		show_debug_message("obj_par_patch handle_click(): "+string(id)+" patch pressed!");
+		//if (obj_gui_manager.selected_patch_id != id) { // <--- always changes selected_patch when clicking on a patch
+		if (obj_gui_manager.selected_patch_id != id) and (!ready_to_harvest) { // <--- only changes selected_patch when clicking on a patch that is not ready to harvest
+			obj_gui_manager.selected_patch_id = id;
+			show_debug_message("obj_par_patch handle_click(): "+string(id)+" is now the selected patch!");
+		}
+	}
+}
 
 function patch_timer_done(patch_id) {
 	//show_debug_message("obj_par_patch PATCH_TIMER_DONE");

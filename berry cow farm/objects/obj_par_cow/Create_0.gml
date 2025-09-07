@@ -47,6 +47,12 @@ cow_name = "Unnamed";
 cow_type = "Notype";
 cow_mood = 0.5;
 
+// push gui instance id to gui manager upon creation
+// for layered gui click handling purposes
+if (instance_exists(obj_gui_manager)) {
+	array_push(obj_gui_manager.gui_elements, id);
+}
+
 #region initiate state cycle with alarm:
 //alarm[0] = game_get_speed(gamespeed_fps) * (4 / 3);
 //show_debug_message("obj_par_cow CREATE: "+string(id)+" called for alarm[0] at "+string(current_time));
@@ -117,4 +123,26 @@ function determine_mood() {
 	//}
 	
 	show_debug_message("obj_par_cow DETERMINE_MOOD: cow_mood was "+string(cow_mood_prev)+". now it's "+string(cow_mood)+".");
+}
+
+function handle_click() {
+	var current_patch = instance_place(x, y, obj_par_patch);
+	// if pressed on cow while not dragging and tracked_cow is inactive and patch is not ready to harvest
+	if (global.tracked_cow == noone) and (!cow_dragging) and (!cow_pressed) and (!current_patch.ready_to_harvest) {
+		// store mouse_x and mouse_y pos at time of press
+		mouse_prev_x = mouse_x;
+		mouse_prev_y = mouse_y;
+		cow_pressed = true;
+	}
+}
+	
+function check_gui_click() {
+    if (point_in_rectangle(mouse_x, mouse_y, x - sprite_width/2, y - sprite_height/2, x + sprite_width/2, y + sprite_height/2)) {
+        handle_click();
+		//show_debug_message("obj_par_cow check_gui_click(): "+string(id)+" called handle_click()");
+        return true;
+    }
+	
+	//show_debug_message("obj_par_cow check_gui_click(): "+string(id)+" did not call handle_click()");
+    return false;
 }
