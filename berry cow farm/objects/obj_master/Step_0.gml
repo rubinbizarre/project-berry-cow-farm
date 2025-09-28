@@ -45,5 +45,29 @@ switch (room) {
 		}
 	} break;
 	case rm_main: {
+		// handle checking for clicks on world objects
+		if (mouse_check_button_pressed(mb_left)) and (!obj_gui_manager.click_handled) {
+		    click_handled = false;
+    
+		    // Sort world objects by depth (lower depth = drawn on top)
+		    array_sort(world_objects, function(a, b) {
+		        return a.depth - b.depth;
+		    });
+    
+		    // Check each element in order
+		    for (var i = 0; i < array_length(world_objects); i++) {
+		        var element = world_objects[i];
+				//show_debug_message("obj_gui_manager STEP: element = "+string(gui_elements[i]));
+		        if (instance_exists(element)) and (element.visible) {
+		            // Call the element's click check method
+			        if (element.check_world_click()) {
+			            click_handled = true;
+						show_debug_message("obj_master STEP: click handled! "+string(element.id));
+			            break; // Stop checking other elements
+			        }
+		        }
+		    }
+			//show_debug_message("obj_gui_manager STEP: reached end of click handle.");
+		}
 	} break;
 }

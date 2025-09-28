@@ -57,3 +57,4 @@ if (obj_gui_manager.selected_patch_id != noone) {
 	draw_set_valign(prev_valign);
 }
 #endregion
+

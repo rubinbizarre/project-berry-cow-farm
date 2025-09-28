@@ -21,8 +21,9 @@ patch_name = "Plain Patch";
 
 // for patch timer
 //patch_harvest = false;
+patch_time = noone;
 patch_time_active = false;
-patch_time_period_modifier = 3;
+patch_time_period_modifier = 5;
 //patch_time_remaining = 0; // assigned in step event
 //patch_time_period = 0; // count_cows_in_patch() * 3; // not detecting cow instances in this create event
 
@@ -32,78 +33,100 @@ production_duration = 0;
 production_time_remaining = 0;
 ready_to_harvest = false;
 
-// push gui instance id to gui manager upon creation
-// for layered gui click handling purposes
-if (instance_exists(obj_gui_manager)) {
-	array_push(obj_gui_manager.gui_elements, id);
+// push world instance id to obj_master world_objects[] upon creation
+// for layered objects handling purposes. similar to obj_gui_manager's gui_elements[]
+if (instance_exists(obj_master)) {
+	array_push(obj_master.world_objects, id);
 }
 
-function check_gui_click() {
-    var mx = device_mouse_x_to_gui(0);
-    var my = device_mouse_y_to_gui(0);
-    
-	var sprite_w = sprite_get_width(spr_patch);
-	var sprite_h = sprite_get_height(spr_patch);
-	
-	if (point_in_rectangle(mouse_x, mouse_y, x - sprite_w/2, y - sprite_h/2, x + sprite_w/2, y + sprite_h/2)) {
+function check_world_click() {
+	//var sprite_w = sprite_get_width(spr_patch);
+	//var sprite_h = sprite_get_height(spr_patch);
+	//if (point_in_rectangle(mouse_x, mouse_y, x - sprite_w/2, y - sprite_h/2, x + sprite_w/2, y + sprite_h/2)) {
+	if (point_in_rectangle(mouse_x, mouse_y, x - sprite_width/2, y - sprite_height/2, x + sprite_width/2, y + sprite_height/2)) {
         handle_click();
-		//show_debug_message("obj_par_btns check_gui_click(): "+string(id)+" called handle_click()");
         return true;
     }
-	//show_debug_message("obj_par_btns check_gui_click(): "+string(id)+" did not call handle_click()");
     return false;
 }
 
 function handle_click() {
-	if (patch_hover) and (!patch_pressed) {
+	var cow_object_pressed = false;
+	with (obj_par_cow) {
+		if (cow_pressed) {
+			cow_object_pressed = true;
+		}
+	}
+	if (patch_hover) and (!patch_pressed) and (!cow_object_pressed) {
 		patch_pressed = true;
-		show_debug_message("obj_par_patch handle_click(): "+string(id)+" patch pressed!");
+		//show_debug_message("obj_par_patch handle_click(): "+string(id)+" patch pressed!");
 		//if (obj_gui_manager.selected_patch_id != id) { // <--- always changes selected_patch when clicking on a patch
 		if (obj_gui_manager.selected_patch_id != id) and (!ready_to_harvest) { // <--- only changes selected_patch when clicking on a patch that is not ready to harvest
 			obj_gui_manager.selected_patch_id = id;
-			show_debug_message("obj_par_patch handle_click(): "+string(id)+" is now the selected patch!");
+			//show_debug_message("obj_par_patch handle_click(): "+string(id)+" is now the selected patch!");
 		}
 	}
 }
 
 function patch_timer_done(patch_id) {
-	//show_debug_message("obj_par_patch PATCH_TIMER_DONE");
-    patch_id.ready_to_harvest = true;
-	show_debug_message("obj_par_patch CREATE: patch_timer_done(): made ready_to_harvest true for "+string(patch_id));
+    if (!patch_id.ready_to_harvest) patch_id.ready_to_harvest = true;
+	if (patch_id.patch_time != noone) patch_id.patch_time = noone;
+	show_debug_message("obj_par_patch CREATE: patch_timer_done(): "+string(patch_id)+" made ready_to_harvest true and patch_time noone");
 }
 
-function patch_timer_reset() {
-	ready_to_harvest = false;
-	show_debug_message("obj_par_patch CREATE: patch_timer_reset(): made ready_to_harvest false");
-	if (time_source_exists(patch_time)) {
-		// restart patch timer only if it's inactive (working)
-		if (time_source_get_state(patch_time) == time_source_state_stopped) {
-			//time_source_reset(patch_time);
-			//time_source_start(patch_time);
-			
-			time_source_destroy(patch_time);
+function patch_timer_reset(patch_id) {
+	patch_id.ready_to_harvest = false;
+	show_debug_message("obj_par_patch CREATE: patch_timer_reset(): "+string(patch_id)+" made ready_to_harvest false");
+	if (time_source_exists(patch_id.patch_time)) {
+		// restart patch timer only if it's inactive
+		if (time_source_get_state(patch_id.patch_time) == time_source_state_stopped) {
+			time_source_destroy(patch_id.patch_time);
 			start_patch_time();
-			show_debug_message("obj_par_patch CREATE: patch_timer_reset(): restarted patch_time");
+			show_debug_message("obj_par_patch CREATE: patch_timer_reset(): "+string(patch_id)+" restarted patch_time");
 		}
 	}
 }
 
 function start_patch_time() {
-	var cow_count = count_cows_in_patch();
-	production_duration = cow_count * patch_time_period_modifier;
+	//if (patch_time == noone) and (!ready_to_harvest) {
 	
-	// start patch timer if there are cows inside
-	if (cow_count > 0) {
-		// NEW: Record when production started
-        production_start_time = date_current_datetime();
-        //production_duration = patch_time_period;
-        ready_to_harvest = false;
-		
-		patch_time = time_source_create(time_source_game, production_duration, time_source_units_seconds, patch_timer_done, [id], 1, time_source_expire_after);
-		time_source_start(patch_time);
-		patch_time_active = true;
-		show_debug_message("obj_par_patch CREATE: start_patch_time(): Created patch timer ("+string(production_duration)+" secs) for patch "+string(id));
+	if (patch_time != noone) {
+		destroy_patch_time();
 	}
+	
+	if (!ready_to_harvest) {
+		show_debug_message("obj_par_patch CREATE: start_patch_time(): "+string(id)+" patch_time was noone, creating new patch timer...");
+		var cow_count = count_cows_in_patch();	
+		// create and start patch timer if there are cows inside
+		if (cow_count > 0) {
+			production_duration = cow_count * patch_time_period_modifier;
+		    production_start_time = date_current_datetime();
+		    ready_to_harvest = false;
+		
+			patch_time = time_source_create(time_source_game, production_duration, time_source_units_seconds, patch_timer_done, [id], 1, time_source_expire_after);
+			time_source_start(patch_time);
+			//patch_time_active = true;
+			show_debug_message("obj_par_patch CREATE: start_patch_time(): "+string(id)+" has cows in patch. created patch timer ("+string(production_duration)+" secs)");
+		} else {
+			destroy_patch_time();
+			show_debug_message("obj_par_patch CREATE: start_patch_time(): "+string(id)+" has zero cows in patch! timer called to be destroyed!");
+		}
+	}
+	
+	//} else {
+	//	//destroy_patch_time();
+	//	show_debug_message("obj_par_patch CREATE: start_patch_time(): "+string(id)+" patch_time was already assigned or patch was ready to harvest! no timer created. | patch_time: "+string(patch_time)+" | ready_to_harvest: "+string(ready_to_harvest));
+	//}
+}
+
+function destroy_patch_time() {
+	if (patch_time != noone) {
+        if (time_source_exists(patch_time)) {
+            time_source_destroy(patch_time);
+            show_debug_message("obj_par_patch CREATE: destroy_patch_time(): "+string(id)+" destroyed patch time");
+        }
+        patch_time = noone; // Important: reset to noone after destroying
+    }
 }
 
 function resume_production_after_load(patch_id, time_remaining) {
@@ -117,7 +140,7 @@ function resume_production_after_load(patch_id, time_remaining) {
             // Still producing, create a new timer for remaining time
             patch_time = time_source_create(time_source_game, time_remaining, time_source_units_seconds, patch_timer_done, [id], 1, time_source_expire_after);
             time_source_start(patch_time);
-            patch_time_active = true;
+            //patch_time_active = true;
             show_debug_message("obj_par_patch CREATE: resume_production_after_load(): "+string(patch_id)+" Resumed production with " + string(time_remaining) + " secs remaining");
         } else {
 			show_debug_message("obj_par_patch CREATE: resume_production_after_load(): "+string(patch_id)+" No time remaining!");
@@ -126,10 +149,10 @@ function resume_production_after_load(patch_id, time_remaining) {
 		show_debug_message("obj_par_patch CREATE: resume_production_after_load(): "+string(patch_id)+" Ready to harvest!");
 		patch_time = time_source_create(time_source_game, 0.1, time_source_units_seconds, patch_timer_done, [id], 1, time_source_expire_after);
         time_source_start(patch_time);
-        patch_time_active = true;
+        //patch_time_active = true;
 	}
 }
-	
+
 function count_cows_in_patch() {
 	var cow_list = ds_list_create();
     var cow_count = instance_place_list(x, y, obj_par_cow, cow_list, false);

@@ -41,6 +41,15 @@ show_debug_message("obj_farm_manager CREATE: game_save_id = "+game_save_id);
 
 function save_farm_data() {
 	show_debug_message("obj_farm_manager CREATE: save_farm_data(): beginning save_farm_data");
+	
+	// with each patch, count cows
+	// save function called when cows are moved
+	// patches need up-to-date info on cows they have
+	with (obj_par_patch) {
+		start_patch_time();
+		show_debug_message("obj_farm_manager CREATE: save_farm_data(): "+string(id)+" executed start_patch_time");
+	}
+	
     var save_data = ds_map_create();
 	var save_file_path = game_save_id + "farm_save.json";
     
@@ -493,7 +502,7 @@ function create_cow_object(cow_data) {
     
     //cow_obj.cow_data = cow_data;
    
-    show_debug_message("obj_farm_manager CREATE: create_cow_object(): "+string(cow_obj)+" cow added to farm");
+    show_debug_message("obj_farm_manager CREATE: create_cow_object(): "+string(cow_obj)+" cow named "+string(ds_map_find_value(cow_data, "name"))+" with id = "+string(ds_map_find_value(cow_data, "id"))+" added to farm");
     return cow_obj;
 }
 

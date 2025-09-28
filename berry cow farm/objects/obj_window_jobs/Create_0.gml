@@ -1,7 +1,7 @@
 // Inherit the parent event
 event_inherited();
 
-gui_sprite = spr_window_milk;
+gui_sprite = spr_window_jobs;
 //gui_alpha = 0.8;
 
 function handle_click() {
@@ -13,6 +13,6 @@ function handle_click() {
 		mouse_prev_y = gui_mouse_y;
 		mouse_offset_x = mouse_prev_x - gui_x;
 		mouse_offset_y = mouse_prev_y - gui_y;
-		show_debug_message("obj_window_milk handle_click(): window pressed");
+		show_debug_message("obj_window_jobs handle_click(): window pressed");
 	}	
 }

@@ -110,3 +110,11 @@ if (ready_to_harvest) {
 	// draw central milk bucket with subtle hover effect (tied to harvest_alpha)
 	draw_sprite(spr_milk_bucket, 0, x, y + harvest_alpha*4);
 }
+
+if (global.debug) {
+	draw_set_halign(fa_center);
+	//draw_text_transformed(x, y+sprite_height/2, "patch_time_active = "+string(patch_time_active), 0.25, 0.3, 0);
+	draw_text_transformed(x, y+sprite_height/2+40, "patch_time = "+string(patch_time), 0.25, 0.3, 0);
+	draw_text_transformed(x, y+sprite_height/2+80, "time_remaining = "+string(production_time_remaining), 0.25, 0.3, 0);
+	draw_set_halign(fa_left);
+}

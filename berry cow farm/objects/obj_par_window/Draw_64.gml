@@ -1,5 +1,5 @@
 // draw window sprite
-draw_sprite(gui_sprite, 0, gui_x, gui_y);
+draw_sprite_ext(gui_sprite, 0, gui_x, gui_y, 1, 1, 0, c_white, gui_alpha);
 
 //// debug values:
 //draw_text(gui_x, gui_y + 500, "gui_x: "+string(gui_x));

@@ -1,4 +1,4 @@
-//// moved to obj_gui_manager
+#region //// moved to obj_gui_manager
 //switch (room) {
 //	case rm_load: {
 //		draw_set_font(font_debug);
@@ -175,4 +175,12 @@
 //		#endregion
 //	} break;
 //}
+#endregion
 
+//// debug display world_objects array items:
+//var world_objects_y = 400;
+//draw_text_transformed(40, world_objects_y-50, "world_objects[]:", 0.6, 0.7, 0);
+//for (var i = 0; i < array_length(world_objects); i++) {
+//	draw_text_transformed(40, world_objects_y, string(i)+": "+string(world_objects[i]), 0.6, 0.7, 0);
+//	world_objects_y += 50;
+//}

@@ -1,6 +1,7 @@
 gui_sprite = spr_window_milk;
 gui_x = 40;
 gui_y = 120;
+gui_alpha = 0.95;
 
 cancel_sprite = spr_btn_cancel;
 cancel_subimage = 0;

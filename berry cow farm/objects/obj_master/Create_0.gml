@@ -83,3 +83,6 @@ card_patch = {
 	x2: room_width/2 + 90,
 	y2: 20 + 60
 }
+
+click_handled = false;
+world_objects = [];

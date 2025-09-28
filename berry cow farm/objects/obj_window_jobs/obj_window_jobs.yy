@@ -1,11 +1,11 @@
 {
   "$GMObject":"",
-  "%Name":"obj_window_milk",
+  "%Name":"obj_window_jobs",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_window_milk",
+  "name":"obj_window_jobs",
   "overriddenProperties":[],
   "parent":{
     "name":"Windows",
@@ -33,8 +33,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_window_milk",
-    "path":"sprites/spr_window_milk/spr_window_milk.yy",
+    "name":"spr_window_jobs",
+    "path":"sprites/spr_window_jobs/spr_window_jobs.yy",
   },
   "spriteMaskId":null,
   "visible":true,

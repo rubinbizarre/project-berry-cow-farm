@@ -1,4 +1,4 @@
-if (patch_time_active) {
+if (patch_time != noone) {
 	if (time_source_exists(patch_time)) {
 		// track time remaining in patch timer only if it's active
 		if (time_source_get_state(patch_time) == time_source_state_active) {
@@ -62,7 +62,7 @@ patch_hover = point_in_rectangle(
     x + sprite_w/2, y + sprite_h/2
 );
 
-//// Handle click (commented) moved to handle_click() tied to obj_gui_manager
+#region //// Handle click (commented) moved to handle_click() tied to obj_gui_manager
 //if (mouse_check_button_pressed(mb_left)) {
 //	// loop through buttons to see if mouse is over them
 //	var mouse_over_btn = 0;
@@ -96,29 +96,22 @@ patch_hover = point_in_rectangle(
 //		}
 //	}
 //}
+#endregion
+
+if (mouse_check_button_pressed(mb_left)) and (!obj_gui_manager.click_handled) {
+	var clicked_patch = instance_position(mouse_x, mouse_y, obj_par_patch);
+    if (clicked_patch != noone) {
+        with (clicked_patch) {
+            handle_click();
+        }
+    }
+}
 
 // Do action and reset pressed state when released while pressed
 // if releasing on top of a patch while pressed and while not tracking a cow,
 if (mouse_check_button_released(mb_left)) and (patch_pressed) and (global.tracked_cow == noone) {
 	// disengage patch press
 	patch_pressed = false;
-	
-	//// if patch is ready for harvest,
-	//if (ready_to_harvest) {
-	//	// disable visual overlay
-	//	ready_to_harvest = false;
-	//	// add milk
-	//	obj_farm_manager.milk_total += 100;
-	//	// restart timer
-	//	patch_timer_reset();
-	//} else {
-	//	// if no patch is selected,
-	//	if (selected_patch_id == noone) {
-	//		// make the selected_patch_id the patch user clicked on.
-	//		selected_patch_id = id;
-	//		show_debug_message("obj_par_patch STEP: "+string(id)+" patch clicked + released! Selected patch: "+string(selected_patch_id));
-	//	}
-	//}
 	
 	if (!ready_to_harvest) {
 		// if no patch is already selected and its not ready to harvest
@@ -128,6 +121,8 @@ if (mouse_check_button_released(mb_left)) and (patch_pressed) and (global.tracke
 			show_debug_message("obj_par_patch STEP: "+string(id)+" patch clicked + released! Selected patch: "+string(obj_gui_manager.selected_patch_id));
 		}
 	} else { // if patch is ready to harvest
+		show_debug_message("obj_par_patch STEP: "+string(id)+" patch clicked + released! And ready to harvest!");
+		
 		// disable visual overlay
 		ready_to_harvest = false;
 		
@@ -206,7 +201,7 @@ if (mouse_check_button_released(mb_left)) and (patch_pressed) and (global.tracke
 		#endregion
 		
 		// restart timer
-		patch_timer_reset();
+		patch_timer_reset(id);
 		
 		// save
 		obj_farm_manager.save_farm_data();

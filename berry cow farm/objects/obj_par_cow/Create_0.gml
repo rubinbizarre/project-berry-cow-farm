@@ -20,8 +20,6 @@ walk_speed = 0.25;
 // store mouse position, etc for click+dragging function
 mouse_prev_x = 0;
 mouse_prev_y = 0;
-cow_prev_x = 0;
-cow_prev_y = 0;
 cow_dragging = false;
 cow_pressed = false;
 
@@ -41,16 +39,21 @@ shadow_width = 20;
 shadow_height = 5;
 
 // save data:
-cow_id = id;
+//cow_id = id;
 // edited in child obj:
 cow_name = "Unnamed";
 cow_type = "Notype";
 cow_mood = 0.5;
 
-// push gui instance id to gui manager upon creation
-// for layered gui click handling purposes
-if (instance_exists(obj_gui_manager)) {
-	array_push(obj_gui_manager.gui_elements, id);
+// used when releasing cow after drag to determine if destination patch is different to its previous patch
+current_patch = instance_place(x, y, obj_par_patch);
+cow_prev_x = 0;
+cow_prev_y = 0;
+
+// push world instance id to obj_master world_objects[] upon creation
+// for layered objects handling purposes. similar to obj_gui_manager's gui_elements[]
+if (instance_exists(obj_master)) {
+	array_push(obj_master.world_objects, id);
 }
 
 #region initiate state cycle with alarm:
@@ -132,17 +135,18 @@ function handle_click() {
 		// store mouse_x and mouse_y pos at time of press
 		mouse_prev_x = mouse_x;
 		mouse_prev_y = mouse_y;
+		cow_prev_x = x;
+		cow_prev_y = y;
 		cow_pressed = true;
 	}
 }
 	
-function check_gui_click() {
+function check_world_click() {
     if (point_in_rectangle(mouse_x, mouse_y, x - sprite_width/2, y - sprite_height/2, x + sprite_width/2, y + sprite_height/2)) {
         handle_click();
 		//show_debug_message("obj_par_cow check_gui_click(): "+string(id)+" called handle_click()");
         return true;
     }
-	
 	//show_debug_message("obj_par_cow check_gui_click(): "+string(id)+" did not call handle_click()");
     return false;
 }

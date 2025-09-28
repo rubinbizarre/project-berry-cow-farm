@@ -1,3 +1,10 @@
+//var gui_elements_y = 400;
+//draw_text_transformed(40, gui_elements_y-50, "gui_elements[]:", 0.6, 0.7, 0);
+//for (var i = 0; i < array_length(gui_elements); i++) {
+//	draw_text_transformed(40, gui_elements_y, string(i)+": "+string(gui_elements[i]), 0.6, 0.7, 0);
+//	gui_elements_y += 50;
+//}
+
 #region handle drawing milk chart surface
 if (obj_farm_manager.milk_chart_active) {
 	if (surface_exists(obj_farm_manager.milk_surface)) and (instance_exists(obj_window_milk)) {

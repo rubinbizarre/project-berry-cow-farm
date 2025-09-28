@@ -47,3 +47,19 @@ if (instance_exists(obj_btn_milk)) {
 		}
 	}
 }
+
+if (instance_exists(obj_btn_jobs)) {
+	if (obj_btn_jobs.btn_activated) {
+		if (!instance_exists(obj_window_jobs)) {
+			var window = instance_create_layer(0, 0, "GUI", obj_window_jobs);
+			window.gui_x = last_window_jobs_gui_x;
+			window.gui_y = last_window_jobs_gui_y;
+		}
+	} else {
+		if (instance_exists(obj_window_jobs)) {
+			last_window_jobs_gui_x = obj_window_jobs.gui_x;
+			last_window_jobs_gui_y = obj_window_jobs.gui_y;
+			instance_destroy(obj_window_jobs);
+		}
+	}
+}
