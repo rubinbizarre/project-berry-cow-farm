@@ -31,6 +31,28 @@ milk_chart_capacity_r1 = 110 * chart_scale_factor;
 milk_chart_capacity_r2 = 120 * chart_scale_factor;
 milk_chart_active = false;
 
+orders_surface = -1;
+orders_active = [];
+orders_available = [];
+// each order card needs to know its
+// 1) milk type
+// 2) milk amount
+// 3) time to complete
+// 4) reward amount
+initialise_orders();
+
+function initialise_orders() {
+	for (var i = 0; i < 3; i++) {
+		var factor = irandom_range(1, 6);
+		var order = {};
+		order.milk_type = choose("blackberry", "banana");
+		order.milk_amount = 500 * factor;
+		order.time_to_complete = 60 * factor; // how many minutes
+		order.reward = (500 * factor) * 1.5;
+		orders_available[i] = order;
+	}
+}
+
 // Initialize session
 //create_starting_farm(); // moved to load_farm_data and runs if save does not exist
 load_farm_data();
@@ -713,6 +735,33 @@ function make_milk_chart(cx, cy, r1, r2, values, colors) {
     surface_reset_target();
 }
 
-function make_jobs_window() {
+function make_orders_surface() {
 	//...
 }
+
+function has_milk(milk_type, milk_amount) {
+	var total_milk_type = 0;
+	switch (milk_type) {
+		case "banana":		total_milk_type = milk_banana; break;
+		case "blackberry":	total_milk_type = milk_blackberry; break;
+	}
+	return total_milk_type >= milk_amount;
+}
+
+function accept_order(order_struct) {
+	// remove from available orders
+	var index = array_get_index(orders_available, order_struct);
+	if (index >= 0) {
+		array_delete(orders_available, index, 1);
+	}
+	// add to active orders with start time
+	order_struct.start_time = current_time;
+	array_push(orders_active, order_struct);
+	
+	// set flag to destroy/recreate (refresh) order instances not immediately
+    if (instance_exists(obj_window_orders)) {
+        obj_window_orders.needs_card_refresh = true;
+    }
+	
+	//save_farm_data();
+}	

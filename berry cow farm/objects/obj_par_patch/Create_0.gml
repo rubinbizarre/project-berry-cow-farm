@@ -126,6 +126,7 @@ function destroy_patch_time() {
             show_debug_message("obj_par_patch CREATE: destroy_patch_time(): "+string(id)+" destroyed patch time");
         }
         patch_time = noone; // Important: reset to noone after destroying
+		production_time_remaining = 0;
     }
 }
 

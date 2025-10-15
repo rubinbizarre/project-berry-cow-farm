@@ -25,10 +25,15 @@ mouse_offset_y = 0;
 // for determining window on top (future?)
 //window_active = false; //noone; 
 
-// move below all buttons when created
+// move below all buttons when window created
 with (obj_par_btns) {
 	depth = other.depth - 1;
 }
+
+//// hide all buttons except milk btn when window created
+//with (obj_par_btns) {
+//	if (visible and gui_sprite != spr_milk_bucket_button) visible = false;
+//}
 
 // push gui instance id to gui manager upon creation
 // for layered gui click handling purposes

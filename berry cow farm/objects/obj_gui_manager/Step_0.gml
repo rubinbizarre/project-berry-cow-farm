@@ -10,15 +10,19 @@ if (mouse_check_button_pressed(mb_left)) {
     // Check each element in order
     for (var i = 0; i < array_length(gui_elements); i++) {
         var element = gui_elements[i];
-		//show_debug_message("obj_gui_manager STEP: element = "+string(gui_elements[i]));
-        if (instance_exists(element)) and (element.visible) {
+		
+        if (instance_exists(element)) {
             // Call the element's click check method
-	        if (element.check_gui_click()) {
+	        if (element.visible and element.check_gui_click()) {
 	            click_handled = true;
 				show_debug_message("obj_gui_manager STEP: click handled! "+string(element.id));
 	            break; // Stop checking other elements
 	        }
-        }
+        } else {
+			// Clean up dead references
+            array_delete(gui_elements, i, 1);
+            i--; // Adjust index since we removed an element
+		}
     }
 	
 	if (!click_handled) {
@@ -50,16 +54,16 @@ if (instance_exists(obj_btn_milk)) {
 
 if (instance_exists(obj_btn_jobs)) {
 	if (obj_btn_jobs.btn_activated) {
-		if (!instance_exists(obj_window_jobs)) {
-			var window = instance_create_layer(0, 0, "GUI", obj_window_jobs);
+		if (!instance_exists(obj_window_orders)) {
+			var window = instance_create_layer(0, 0, "GUI", obj_window_orders);
 			window.gui_x = last_window_jobs_gui_x;
 			window.gui_y = last_window_jobs_gui_y;
 		}
 	} else {
-		if (instance_exists(obj_window_jobs)) {
-			last_window_jobs_gui_x = obj_window_jobs.gui_x;
-			last_window_jobs_gui_y = obj_window_jobs.gui_y;
-			instance_destroy(obj_window_jobs);
+		if (instance_exists(obj_window_orders)) {
+			last_window_jobs_gui_x = obj_window_orders.gui_x;
+			last_window_jobs_gui_y = obj_window_orders.gui_y;
+			instance_destroy(obj_window_orders);
 		}
 	}
 }
