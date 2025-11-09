@@ -82,7 +82,7 @@ function patch_timer_reset(patch_id) {
 		if (time_source_get_state(patch_id.patch_time) == time_source_state_stopped) {
 			time_source_destroy(patch_id.patch_time);
 			start_patch_time();
-			show_debug_message("obj_par_patch CREATE: patch_timer_reset(): "+string(patch_id)+" restarted patch_time");
+			show_debug_message("obj_par_patch CREATE: patch_timer_reset(): "+string(patch_id)+" restarted patch_time with start_patch_time()");
 		}
 	}
 }
@@ -92,6 +92,7 @@ function start_patch_time() {
 	
 	if (patch_time != noone) {
 		destroy_patch_time();
+		show_debug_message("obj_par_patch CREATE: start_patch_time(): "+string(id)+" executed destroy_patch_time()");
 	}
 	
 	if (!ready_to_harvest) {
@@ -124,7 +125,9 @@ function destroy_patch_time() {
         if (time_source_exists(patch_time)) {
             time_source_destroy(patch_time);
             show_debug_message("obj_par_patch CREATE: destroy_patch_time(): "+string(id)+" destroyed patch time");
-        }
+        } else {
+			show_debug_message("obj_par_patch CREATE: destroy_patch_time(): "+string(id)+" ??? patch_time did not exist");
+		}
         patch_time = noone; // Important: reset to noone after destroying
 		production_time_remaining = 0;
     }

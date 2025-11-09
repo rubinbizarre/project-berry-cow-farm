@@ -31,7 +31,7 @@ need to switch between them at random intervals
 // depth sorting based on room y position
 if (depth != -y) { depth = -y; }
 
-#region handle sprites, movement calculations and delays for state changes
+#region STATE MACHINE | handle sprites, movement calculations and delays for state changes
 switch (cow_state) {
     case COW_STATE.IDLE: {
 		// change sprite and queue state change
@@ -180,8 +180,6 @@ if (mouse_check_button_released(mb_left)) and (cow_dragging) {
 		}
 		#endregion
 		
-		//show_debug_message("obj_par_cow STEP: destination_patch is not the same as current_patch!");
-
 		#region output the previous cows_list *debug* (commented)
 		//var output = "";
 		//for (var i = 0; i < ds_list_size(obj_farm_manager.cows_list); i++) {

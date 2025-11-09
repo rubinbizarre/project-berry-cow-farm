@@ -67,10 +67,10 @@ function save_farm_data() {
 	// with each patch, count cows
 	// save function called when cows are moved
 	// patches need up-to-date info on cows they have
-	with (obj_par_patch) {
-		start_patch_time();
-		show_debug_message("obj_farm_manager CREATE: save_farm_data(): "+string(id)+" executed start_patch_time");
-	}
+	//with (obj_par_patch) {
+	//	start_patch_time();
+	//	show_debug_message("obj_farm_manager CREATE: save_farm_data(): "+string(id)+" executed start_patch_time");
+	//}
 	
     var save_data = ds_map_create();
 	var save_file_path = game_save_id + "farm_save.json";
@@ -762,6 +762,11 @@ function accept_order(order_struct) {
     if (instance_exists(obj_window_orders)) {
         obj_window_orders.needs_card_refresh = true;
     }
+	
+	//// create time source
+	//var order_time_source = time_source_create(time_source_game, production_duration, time_source_units_seconds, patch_timer_done, [id], 1, time_source_expire_after);
+	//time_source_start(order_time_source);
+	//show_debug_message("obj_farm_manager CREATE: accept_order(): created time source timer ("+string(production_duration)+" secs)");
 	
 	//save_farm_data();
 }	

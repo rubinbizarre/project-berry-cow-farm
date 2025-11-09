@@ -202,7 +202,9 @@ if (mouse_check_button_released(mb_left)) and (patch_pressed) and (global.tracke
 		
 		// restart timer
 		patch_timer_reset(id);
-		
+		show_debug_message("obj_par_patch STEP: called patch_timer_reset("+string(id)+") ...");
+		start_patch_time();
+		//show_debug_message("obj_par_patch STEP: "+string(id)+" executed start_patch_time()");
 		// save
 		obj_farm_manager.save_farm_data();
 		show_debug_message("obj_par_patch STEP: called save_farm_data() ...");
