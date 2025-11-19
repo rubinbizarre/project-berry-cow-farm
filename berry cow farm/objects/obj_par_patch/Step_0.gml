@@ -200,6 +200,10 @@ if (mouse_check_button_released(mb_left)) and (patch_pressed) and (global.tracke
 		show_debug_message("obj_par_patch STEP: Farm now has "+string(obj_farm_manager.milk_total)+" in total!");
 		#endregion
 		
+		#region display milk particles (WIP)
+		instance_create_layer(0, 0, "GUI", obj_milk_p_bezier);
+		#endregion
+		
 		// restart timer
 		patch_timer_reset(id);
 		show_debug_message("obj_par_patch STEP: called patch_timer_reset("+string(id)+") ...");

@@ -2,8 +2,8 @@
 event_inherited();
 
 gui_sprite = sprite_index;
-gui_x = display_get_gui_width()/2 + 30;
-gui_y = 22;
+gui_x = 1020;
+gui_y = 48;
 
 btn_is_toggle = true;
 

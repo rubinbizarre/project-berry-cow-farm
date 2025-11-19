@@ -107,8 +107,9 @@ if (ready_to_harvest) {
 		
 	draw_set_alpha(1);
 	
-	// draw central milk bucket with subtle hover effect (tied to harvest_alpha)
-	draw_sprite(spr_milk_bucket, 0, x, y + harvest_alpha*4);
+	// draw central milk icon with subtle hover effect (tied to harvest_alpha)
+	//draw_sprite(spr_milk_bucket, 0, x, y + harvest_alpha*4);
+	draw_sprite_ext(spr_milk_bottle_large, 0, x, y + harvest_alpha*4, 0.75, 0.75, 0, c_white, 1);
 }
 
 if (global.debug) {

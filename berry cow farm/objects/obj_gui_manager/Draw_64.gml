@@ -36,6 +36,8 @@ switch (room) {
 			draw_text(20, 110, "camera_y: "+string(camera_get_view_y(obj_master.camera)));
 			draw_text(20, 150, "view_centre_x: "+string((camera_get_view_x(obj_master.camera) + obj_camera_controller.zoom_current_w) / 2));
 			draw_text(20, 180, "view_centre_y: "+string((camera_get_view_y(obj_master.camera) + obj_camera_controller.zoom_current_h) / 2));
+			draw_text(20, 210, "display_gui_x: "+string(display_mouse_get_x()));
+			draw_text(20, 240, "display_gui_y: "+string(display_mouse_get_y()));
 		}
 		#endregion
 
