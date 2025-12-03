@@ -77,6 +77,7 @@
     {"id":{"name":"obj_master","path":"objects/obj_master/obj_master.yy",},},
     {"id":{"name":"obj_milk_p_bezier","path":"objects/obj_milk_p_bezier/obj_milk_p_bezier.yy",},},
     {"id":{"name":"obj_milk_p_fade","path":"objects/obj_milk_p_fade/obj_milk_p_fade.yy",},},
+    {"id":{"name":"obj_milk_p","path":"objects/obj_milk_p/obj_milk_p.yy",},},
     {"id":{"name":"obj_mood_slider","path":"objects/obj_mood_slider/obj_mood_slider.yy",},},
     {"id":{"name":"obj_par_btns","path":"objects/obj_par_btns/obj_par_btns.yy",},},
     {"id":{"name":"obj_par_buttons","path":"objects/obj_par_buttons/obj_par_buttons.yy",},},

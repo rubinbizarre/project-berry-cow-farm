@@ -53,6 +53,7 @@
     {"name":"obj_master","order":2,"path":"objects/obj_master/obj_master.yy",},
     {"name":"obj_milk_p_bezier","order":8,"path":"objects/obj_milk_p_bezier/obj_milk_p_bezier.yy",},
     {"name":"obj_milk_p_fade","order":9,"path":"objects/obj_milk_p_fade/obj_milk_p_fade.yy",},
+    {"name":"obj_milk_p","order":10,"path":"objects/obj_milk_p/obj_milk_p.yy",},
     {"name":"obj_mood_slider","order":3,"path":"objects/obj_mood_slider/obj_mood_slider.yy",},
     {"name":"obj_par_btns","order":5,"path":"objects/obj_par_btns/obj_par_btns.yy",},
     {"name":"obj_par_buttons","order":4,"path":"objects/obj_par_buttons/obj_par_buttons.yy",},

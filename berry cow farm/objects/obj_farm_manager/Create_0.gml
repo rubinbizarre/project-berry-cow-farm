@@ -34,6 +34,7 @@ milk_chart_active = false;
 orders_surface = -1;
 orders_active = [];
 orders_available = [];
+number_of_orders = 5;
 // each order card needs to know its
 // 1) milk type
 // 2) milk amount
@@ -42,7 +43,7 @@ orders_available = [];
 initialise_orders();
 
 function initialise_orders() {
-	for (var i = 0; i < 3; i++) {
+	for (var i = 0; i < number_of_orders; i++) {
 		var factor = irandom_range(1, 6);
 		var order = {};
 		order.milk_type = choose("blackberry", "banana");

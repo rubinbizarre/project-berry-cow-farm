@@ -193,15 +193,18 @@ if (mouse_check_button_released(mb_left)) and (patch_pressed) and (global.tracke
 			obj_farm_manager.milk_raspberry +
 			obj_farm_manager.milk_strawberry
 		);
-		// clamp total value to milk capacity
-		obj_farm_manager.milk_total = clamp(temp_milk_total, 0, obj_farm_manager.milk_capacity);
+		
+		obj_farm_manager.milk_total = temp_milk_total;
+		//// clamp total value to milk capacity
+		//obj_farm_manager.milk_total = clamp(temp_milk_total, 0, obj_farm_manager.milk_capacity);
 		
 		show_debug_message("obj_par_patch STEP: Patch with "+string(cow_count)+" cows with net mood of "+string(net_mood)+" produced "+string(milk_produced_total)+" in total");
 		show_debug_message("obj_par_patch STEP: Farm now has "+string(obj_farm_manager.milk_total)+" in total!");
 		#endregion
 		
 		#region display milk particles (WIP)
-		instance_create_layer(0, 0, "GUI", obj_milk_p_bezier);
+		//instance_create_layer(0, 0, "GUI", obj_milk_p_bezier);
+		instance_create_layer(0, 0, "GUI", obj_milk_p);
 		#endregion
 		
 		// restart timer
